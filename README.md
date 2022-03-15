@@ -7,3 +7,6 @@ React
 Postgres
 Bootstrap
 VPS
+
+Mateusz Furga
+Błażej Nowicki
