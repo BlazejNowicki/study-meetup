@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Discipline List | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h1>Discipline List</h1>
+    <ul>
+        {% for discipline in disciplines %}
+            <li>{{ discipline }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
