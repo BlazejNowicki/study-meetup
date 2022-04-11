@@ -3,7 +3,6 @@ Aplikacja webowa pozwalająca na umawianie się na wspólne odrabianie zadań i 
 
 Technologie:
 Django
-React
 Postgres
 Bootstrap
 VPS
