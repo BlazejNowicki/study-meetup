@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}User panel | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <section id="user_home">
+        Hello {{ request.user.username }}
+    </section>
+{% endblock %}

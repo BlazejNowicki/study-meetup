@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Custom apps
     'catalog',
     'event',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            # Custom templatetags
+            'builtins': [
+                'common.templatetags.css_utils'
             ],
         },
     },

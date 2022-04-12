@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Signup | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <section id="user_signup">
+        <h3>Signup</h3>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field | add_classes:'form-control' }}
+
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="text-danger">
+                            {{ field.errors.as_text }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Signup</button>
+        </form>
+    </section>
+{% endblock %}
