@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Event detail | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <section id="event-create">
+        <h3>{{ event.name }}</h3>
+        <p>{{ event.course }}</p>
+        <p>{{ event.description }}</p>
+    </section>
+{% endblock %}

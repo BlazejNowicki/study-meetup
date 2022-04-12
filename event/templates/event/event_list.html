@@ -3,5 +3,13 @@
 {% block title %}Event list | {{ block.super }}{% endblock %}
 
 {% block content %}
-    <h3>Event list</h3>
+    <section id="event-list">
+
+    <ul>
+        {% for event in events %}
+            <li><a href="{% url 'event:detail' event.pk %}">{{ event }}</a></li>
+        {% endfor %}
+    </ul>
+
+    </section>
 {% endblock %}
