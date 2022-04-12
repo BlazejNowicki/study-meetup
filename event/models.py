@@ -13,8 +13,9 @@ EVENT_STATUS = (
 
 class Event(models.Model):
     name = models.CharField(max_length=128, unique=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
-    status = models.IntegerField(choices=EVENT_STATUS)
+    status = models.IntegerField(choices=EVENT_STATUS, default=1)
     description = models.TextField()
 
     class Meta:
