@@ -27,7 +27,7 @@ def user_signin(request):
             login(request, user)
 
             messages.success(request, _('Successfully login.'))
-            return redirect('user:root')
+            return redirect('user:home')
 
     return render(request, 'user/user_signin.html', {'form': form})
 
@@ -49,7 +49,7 @@ def user_signup(request):
             login(request, user)
 
             messages.success(request, _('Successfully signup.'))
-            return redirect('user:root')
+            return redirect('user:home')
 
     return render(request, 'user/user_signup.html', {'form': form})
 

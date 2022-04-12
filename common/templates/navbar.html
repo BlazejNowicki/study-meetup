@@ -26,6 +26,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'event:list' %}" aria-current="page">Events</a>
                 </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:home' %}" aria-current="page">{{ request.user.username }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:logout' %}" aria-current="page">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:signin' %}" aria-current="page">Signin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:signup' %}" aria-current="page">Signup</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
