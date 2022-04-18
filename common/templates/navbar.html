@@ -1,37 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'catalog:root' %}">Study Meetup</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catalog</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'catalog:universities_list' %}">Universities</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'catalog:faculties_list' %}">Faculties</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'catalog:discipline_list' %}">Disciplines</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'catalog:course_list' %}">Courses</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'event:list' %}" aria-current="page">Events</a>
-                </li>
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user:home' %}" aria-current="page">{{ request.user.username }}</a>
+                        <a class="nav-link" href="{% url 'event:list' %}" aria-current="page">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user:logout' %}" aria-current="page">Logout</a>
+                        <a class="nav-link" href="{% url 'catalog:root' %}" aria-current="page">My subjects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:logout' %}" aria-current="page">Logout ({{ request.user.username }})</a>
                     </li>
                 {% else %}
                     <li class="nav-item">

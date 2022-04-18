@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class University(models.Model):
@@ -42,3 +43,13 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+class Follower(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('student', 'course')
+
+    def __str__(self):
+        return f"{self.student} {self.course}"

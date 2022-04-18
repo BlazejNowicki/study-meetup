@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/user/signin')
 def user_home(request):
-    return render(request, 'user/user_home.html', {})
+    return redirect('/catalog/')
 
 
 def user_signin(request):

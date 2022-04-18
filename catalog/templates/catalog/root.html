@@ -1,5 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <a href="{% url 'catalog:course_list' %}">Course List</a>
+    <div class="my-3">
+        <h3>Saved courses</h3>
+        {% if saved %}
+            <form method='post'>
+                {% csrf_token %}
+                <div>
+                    {% for course in saved %}
+                        <div class="my-2">
+                            <label class="form-label">{{course.course}}</label>
+                            <input type="checkbox" class="form-check-input" name="remove" value="{{course.course.id}}"/>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-outline-primary">Remove</button>
+                </div>
+            </form>
+        {% else %}
+            <div>Nothing to show...</div>
+        {% endif %}
+    </div>
+    <div>
+        <h3>Add course</h3>
+        {% comment %} add filtering {% endcomment %}
+        <form method="post">
+            {% csrf_token %}
+            {% for course in all%}
+                <div>
+                    <lable for="course_{{course.id}}"> {{ course.name }} - {{ course.discipline }} - {{course.discipline.faculty}} </label>
+                    <input type="checkbox" name="add" value="{{ course.id }}" id="course_{{course.id}}"/>
+                </div>
+            {% endfor %}
+            {% if all %}
+                <button class="btn btn-outline-primary" type="submit">Add</button>
+            {% endif %}
+        </form>
+    </div>
+    
 {% endblock %}
