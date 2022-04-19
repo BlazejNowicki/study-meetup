@@ -3,9 +3,74 @@
 {% block title %}Event detail | {{ block.super }}{% endblock %}
 
 {% block content %}
-    <section id="event-create">
-        <h3>{{ event.name }}</h3>
-        <p>{{ event.course }}</p>
-        <p>{{ event.description }}</p>
-    </section>
+    <div class="container-md">
+        <div class="row">
+        <div class="col-12 col-md-6 d-flex flex-column my-2 py-3 border bg-light rounded text-dark">
+            <div class="container-fluid my-2">
+                <div class="small text-secondary">Name:</div> 
+                <div class="big">{{event.name}}</div>
+            </div>
+            <div class="container-fluid my-2">
+                <div class="small text-secondary">Author:</div> 
+                <div> {{ event.author }}</div>
+            </div>
+            <div class="container-fluid my-2">
+                <div class="small text-secondary">Course:</div> 
+                <div> {{ event.course }}</div>
+            </div>
+            <div class="container-fluid my-2">
+                <div class="small text-secondary">Status:</div> 
+                <div> {{ event.status }}</div>
+            </div>
+            <div class="container-fluid my-2">
+                <div class="small text-secondary">Description:</div> 
+                <div> {{ event.description }}</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 p-0 container-fluid">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="m-3">Suggested dates:</div>
+                {% for proposition in propositions %}
+                    <div class="mx-md-3 my-2 p-2 border rounded">
+                        <div class="row mx-2">
+                            <div class="col-12 col-md-6">
+                                <div>{{proposition.datetime}}</div>
+                                <div class="text-secondary small">by {{proposition.author}}</div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div>{{proposition.votes}}</div>
+                                {% if proposition.votes == 1 %}
+                                    <div class="text-secondary small">vote</div>
+                                {% else %}
+                                    <div class="text-secondary small">votes</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-3 d-flex align-items-center">
+                                {% if proposition.voted %}
+                                    <button class="btn btn-outline-secondary disabled" name="vote" value="{{proposition.id}}">Voted</button>
+                                {% else %}
+                                    <button class="btn btn-outline-primary" name="vote" value="{{proposition.id}}">Vote</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 p-2 p-md-0">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="my-3">
+                        <label class="form-label">Can't make it? Add your own date</label>
+                        <input class="form-control" type="datetime-local" name="date"/>
+                    </div>
+                    <button class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
