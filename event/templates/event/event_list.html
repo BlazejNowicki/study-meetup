@@ -3,13 +3,30 @@
 {% block title %}Event list | {{ block.super }}{% endblock %}
 
 {% block content %}
-    <section id="event-list">
-
-    <ul>
+    <div>
         {% for event in events %}
-            <li><a href="{% url 'event:detail' event.pk %}">{{ event }}</a></li>
+            <div class="border rounded my-2 p-2">
+                <h5 class="m-2">{{event.name}}</h5>
+                <div class="d-flex flex-column flex-md-row">
+                    <div class="container-fluid">
+                        <div class="small text-secondary">Author:</div> 
+                        <div> {{ event.author }}</div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="small text-secondary">Course:</div> 
+                        <div> {{ event.course }}</div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="small text-secondary">Description:</div> 
+                        <div> {{ event.description }}</div>
+                    </div>
+                    <div class="container-fluid d-flex justify-content-start justify-content-md-end">
+                        <a href="{% url 'event:detail' event.pk %}">
+                            <button class="btn btn-primary my-2">Details</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-
-    </section>
+    </div>
 {% endblock %}

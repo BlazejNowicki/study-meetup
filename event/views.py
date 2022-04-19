@@ -3,12 +3,19 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 
+from catalog.models import Follower
+
 from .forms import EventForm
 from .models import Event
 
 
 def event_list(request):
-    events = Event.objects.all()
+    if not request.user.is_authenticated:
+        return redirect('/user/')
+
+    followers = Follower.objects.filter(student=request.user)
+    ids = [follower.course.id for follower in followers]
+    events = Event.objects.filter(pk__in=ids)
     return render(request, 'event/event_list.html', {'events': events})
 
 
