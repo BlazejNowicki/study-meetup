@@ -26,7 +26,7 @@ def catalog_root(request):
     for follower in followers:
         all_courses = all_courses.all().exclude(id=follower.course.id)
 
-    return render(request, 'catalog/root.html', { 'saved': followers, 'all': all_courses})
+    return render(request, 'catalog/root.html', {'saved': followers, 'all': all_courses})
 
 
 def course_list(request):

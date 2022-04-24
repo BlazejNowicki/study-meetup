@@ -27,6 +27,10 @@
                         <div class="small text-secondary">Description:</div> 
                         <div> {{ event.description }}</div>
                     </div>
+                    <div class="container-fluid">
+                        <div class="small text-secondary">Status:</div>
+                        <div> <span class="badge {% if event.status == 2 %} alert-success {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span></div>
+                    </div>
                     <div class="container-fluid d-flex justify-content-start justify-content-md-end">
                         <a href="{% url 'event:detail' event.pk %}">
                             <button class="btn btn-primary my-2 px-4">Details</button>

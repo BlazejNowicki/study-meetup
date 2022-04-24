@@ -24,6 +24,12 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+    def status_to_str(self):
+        return [s[1] for s in EVENT_STATUS if s[0] == self.status][0]
+
+    def set_status_approved(self):
+        self.status = 2
+
 
 class Proposition(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)

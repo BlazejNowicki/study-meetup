@@ -19,20 +19,30 @@
                 <div> {{ event.course }}</div>
             </div>
             <div class="container-fluid my-2">
-                <div class="small text-secondary">Status:</div> 
-                <div> {{ event.status }}</div>
+                <div class="small text-secondary">Status:</div>
+                <div>
+                    <span class="badge {% if event.status == 2 %} alert-success {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span>
+                </div>
             </div>
             <div class="container-fluid my-2">
                 <div class="small text-secondary">Description:</div> 
                 <div> {{ event.description }}</div>
             </div>
+            {% if event.author == request.user and event.status == 1 %}
+            <div class="container-fluid my-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger" name="close">Close event</button>
+                </form>
+            </div>
+            {% endif %}
         </div>
         <div class="col-12 col-md-6 p-0 container-fluid">
             <form method="POST">
                 {% csrf_token %}
                 <div class="m-3">Suggested dates:</div>
                 {% for proposition in propositions %}
-                    <div class="mx-md-3 my-2 p-2 border rounded">
+                    <div class="mx-md-3 my-2 p-2 border {% if proposition == propositions.0 and event.status != 1 %} border-success {% endif %} rounded ">
                         <div class="row mx-2">
                             <div class="col-12 col-md-6">
                                 <div>{{proposition.datetime}}</div>
@@ -46,6 +56,7 @@
                                     <div class="text-secondary small">votes</div>
                                 {% endif %}
                             </div>
+                            {% if event.status == 1 %}
                             <div class="col-12 col-md-3 d-flex align-items-center">
                                 {% if proposition.voted %}
                                     <button class="btn btn-outline-secondary disabled" name="vote" value="{{proposition.id}}">Voted</button>
@@ -53,12 +64,13 @@
                                     <button class="btn btn-outline-primary" name="vote" value="{{proposition.id}}">Vote</button>
                                 {% endif %}
                             </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 {% endfor %}
             </form>
         </div>
+        {% if event.status == 1%}
         <div class="row">
             <div class="col-12 col-md-6 p-2 p-md-0">
                 <form method="POST">
@@ -71,6 +83,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
     </div>
 
 {% endblock %}

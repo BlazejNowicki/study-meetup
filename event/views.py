@@ -1,5 +1,6 @@
 from datetime import datetime
-from django.forms import DateTimeField
+
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.translation import gettext as _
@@ -7,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from django.utils.timezone import now
 
-from catalog.models import Follower
+from catalog.models import Follower, Course
 
 from .forms import EventForm
 from .models import Event, Proposition, PropositionVote
@@ -19,7 +20,7 @@ def event_list(request):
 
     followers = Follower.objects.filter(student=request.user)
     ids = [follower.course.id for follower in followers]
-    events = Event.objects.filter(pk__in=ids)
+    events = Event.objects.filter(pk__in=ids).order_by('-id')
     return render(request, 'event/event_list.html', {'events': events})
 
 
@@ -29,7 +30,7 @@ def event_detail(request, pk):
 
     event = get_object_or_404(Event, pk=pk)
 
-    if request.method == "POST":
+    if request.method == "POST" and event.status != 2:
         if 'vote' in dict(request.POST):
             proposition_id = int(request.POST['vote'])
             proposition_vote = PropositionVote.objects.filter(author=request.user, proposition_id=proposition_id)
@@ -39,11 +40,15 @@ def event_detail(request, pk):
                                 datetime=now).save()
         
         if 'date' in dict(request.POST):
-            # print(request.POST['date'])
             dt = datetime.strptime(request.POST['date'], '%Y-%m-%dT%H:%M')
-            Proposition(author=request.user,
-                        event=event,
-                        datetime=dt).save()
+            Proposition(author=request.user, event=event, datetime=dt).save()
+
+        if 'close' in dict(request.POST):
+            if request.user != event.author:
+                raise Http404()
+            event.set_status_approved()
+            event.save()
+            messages.success(request, 'Event successfully closed.')
 
     propositions = list(Proposition.objects.filter(event=event))
     votes = PropositionVote.objects.values('proposition').annotate(total=Count('proposition')).order_by('proposition')
@@ -59,15 +64,25 @@ def event_detail(request, pk):
         else:
             prop.votes = 0
             prop.voted = False
+
+    propositions.sort(key=lambda x: x.votes, reverse=True)
     return render(request, 'event/event_detail.html', {'event': event, 'propositions': propositions})
 
 
 def event_create(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request, request.POST)
         if form.is_valid():
+            name = form.cleaned_data.get('name')
+            course = form.cleaned_data.get('course')
+            description = form.cleaned_data.get('description')
+
+            course = Course.objects.get(pk=int(course))
+            event = Event(name=name, author=request.user, course=course, description=description)
+            event.save()
+
             messages.success(request, _('Event successfully created.'))
             return redirect('event:list')
     else:
-        form = EventForm()
+        form = EventForm(request)
     return render(request, 'event/event_create.html', {'form': form})

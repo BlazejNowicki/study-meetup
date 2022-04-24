@@ -44,6 +44,7 @@ class Course(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+
 class Follower(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
