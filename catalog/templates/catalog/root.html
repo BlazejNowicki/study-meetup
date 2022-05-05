@@ -6,15 +6,27 @@
         {% if saved %}
             <form method='post'>
                 {% csrf_token %}
-                <div>
-                    {% for course in saved %}
-                        <div class="my-2">
-                            <label class="form-label">{{course.course}}</label>
-                            <input type="checkbox" class="form-check-input" name="remove" value="{{course.course.id}}"/>
-                        </div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-outline-primary">Remove</button>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course</th>
+                            <th scope="col">Discipline</th>
+                            <th scope="col">Faculty</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in saved %}
+                        <tr>
+                            <td>{{ course.course.name }}</td>
+                            <td>{{ course.course.discipline }}</td>
+                            <td>{{ course.course.discipline.faculty }}</td>
+                            <td><input type="checkbox" name="remove" value="{{ course.course.id }}"/></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            <button type="submit" class="btn btn-outline-primary">Remove</button>
             </form>
         {% else %}
             <div>Nothing to show...</div>
@@ -25,12 +37,26 @@
         {% comment %} add filtering {% endcomment %}
         <form method="post">
             {% csrf_token %}
-            {% for course in all%}
-                <div>
-                    <lable for="course_{{course.id}}"> {{ course.name }} - {{ course.discipline }} - {{course.discipline.faculty}} </label>
-                    <input type="checkbox" name="add" value="{{ course.id }}" id="course_{{course.id}}"/>
-                </div>
-            {% endfor %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Course</th>
+                        <th scope="col">Discipline</th>
+                        <th scope="col">Faculty</th>
+                        <th scope="col">Enroll</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in all %}
+                    <tr>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.discipline }}</td>
+                        <td>{{ course.discipline.faculty }}</td>
+                        <td><input type="checkbox" name="add" value="{{ course.id }}" id="course_{{course.id}}"/></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% if all %}
                 <button class="btn btn-outline-primary" type="submit">Add</button>
             {% else %}
@@ -38,5 +64,4 @@
             {% endif %}
         </form>
     </div>
-    
 {% endblock %}

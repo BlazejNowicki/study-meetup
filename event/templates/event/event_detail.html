@@ -21,7 +21,7 @@
             <div class="container-fluid my-2">
                 <div class="small text-secondary">Status:</div>
                 <div>
-                    <span class="badge {% if event.status == 2 %} alert-success {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span>
+                    <span class="badge {% if event.status == 2 %} alert-success {% elif event.status == 3 %} alert-warning {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span>
                 </div>
             </div>
             <div class="container-fluid my-2">
@@ -33,6 +33,13 @@
                 <form method="POST">
                     {% csrf_token %}
                     <button class="btn btn-outline-danger" name="close">Close event</button>
+                </form>
+            </div>
+            {% elif event.author == request.user and event.status == 2 %}
+            <div class="container-fluid my-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-warning" name="archive">Archive event</button>
                 </form>
             </div>
             {% endif %}

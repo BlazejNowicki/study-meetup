@@ -20,7 +20,7 @@ class Faculty(models.Model):
         verbose_name_plural = "faculties"
 
     def __str__(self):
-        return f"{self.name} {self.university}"
+        return f"{self.name}"
 
 
 class Discipline(models.Model):
@@ -31,7 +31,7 @@ class Discipline(models.Model):
         verbose_name_plural = "disciplines"
 
     def __str__(self):
-        return f"{self.name} {self.faculty}"
+        return f"{self.name}"
 
 
 class Course(models.Model):

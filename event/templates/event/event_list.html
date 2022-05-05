@@ -11,17 +11,33 @@
                 </button>
             </a>
         </div>
+        <form method="get" class="row gy-2 gx-3 align-items-center">
+            <div class="col-auto">
+                <input type="text" class="form-control" name="name" placeholder="Analiza" value="{{ request.GET.name }}">
+            </div>
+            <div class="col-auto">
+                <select class="form-select" name="status">
+                    <option {% if request.GET.status == '0' %}selected{% endif %} value="0">Status</option>
+                    <option {% if request.GET.status == '1' %}selected{% endif %} value="1">Waiting</option>
+                    <option {% if request.GET.status == '2' %}selected{% endif %} value="2">Approved</option>
+                    <option {% if request.GET.status == '3' %}selected{% endif %} value="3">Archived</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
         {% for event in events %}
             <div class="border rounded my-2 p-2">
                 <h5 class="m-2">{{event.name}}</h5>
                 <div class="d-flex flex-column flex-md-row">
                     <div class="container-fluid">
-                        <div class="small text-secondary">Author:</div> 
-                        <div> {{ event.author }}</div>
+                        <div class="small text-secondary">Course:</div>
+                        <div> {{ event.course }}</div>
                     </div>
                     <div class="container-fluid">
-                        <div class="small text-secondary">Course:</div> 
-                        <div> {{ event.course }}</div>
+                        <div class="small text-secondary">Author:</div> 
+                        <div> {{ event.author }}</div>
                     </div>
                     <div class="container-fluid">
                         <div class="small text-secondary">Description:</div> 
@@ -29,7 +45,7 @@
                     </div>
                     <div class="container-fluid">
                         <div class="small text-secondary">Status:</div>
-                        <div> <span class="badge {% if event.status == 2 %} alert-success {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span></div>
+                        <div> <span class="badge {% if event.status == 2 %} alert-success {% elif event.status == 3 %} alert-warning {% else %} alert-primary {% endif %}">{{ event.status_to_str }}</span></div>
                     </div>
                     <div class="container-fluid d-flex justify-content-start justify-content-md-end">
                         <a href="{% url 'event:detail' event.pk %}">

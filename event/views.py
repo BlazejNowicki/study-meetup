@@ -18,9 +18,17 @@ def event_list(request):
     if not request.user.is_authenticated:
         return redirect('/user/')
 
+    name = request.GET.get('name', '')
+    status = int(request.GET.get('status', 0))
+
     followers = Follower.objects.filter(student=request.user)
     ids = [follower.course.id for follower in followers]
-    events = Event.objects.filter(course__id__in=ids).order_by('-id')
+
+    if status != 0:
+        events = Event.objects.filter(course__id__in=ids, name__icontains=name, status=status).order_by('-id')
+    else:
+        events = Event.objects.filter(course__id__in=ids, name__icontains=name).order_by('-id')
+
     return render(request, 'event/event_list.html', {'events': events})
 
 
@@ -30,8 +38,8 @@ def event_detail(request, pk):
 
     event = get_object_or_404(Event, pk=pk)
 
-    if request.method == "POST" and event.status != 2:
-        if 'vote' in dict(request.POST):
+    if request.method == "POST":
+        if 'vote' in dict(request.POST) and event.is_waiting():
             proposition_id = int(request.POST['vote'])
             proposition_vote = PropositionVote.objects.filter(author=request.user, proposition_id=proposition_id)
             if not proposition_vote.exists():
@@ -39,16 +47,23 @@ def event_detail(request, pk):
                                 author=request.user,
                                 datetime=now).save()
         
-        if 'date' in dict(request.POST):
+        if 'date' in dict(request.POST) and event.is_waiting():
             dt = datetime.strptime(request.POST['date'], '%Y-%m-%dT%H:%M')
             Proposition(author=request.user, event=event, datetime=dt).save()
 
-        if 'close' in dict(request.POST):
+        if 'close' in dict(request.POST) and event.is_waiting():
             if request.user != event.author:
                 raise Http404()
             event.set_status_approved()
             event.save()
             messages.success(request, 'Event successfully closed.')
+
+        if 'archive' in dict(request.POST) and event.is_approved():
+            if request.user != event.author:
+                raise Http404()
+            event.set_status_archived()
+            event.save()
+            messages.success(request, 'Event successfully modified.')
 
     propositions = list(Proposition.objects.filter(event=event))
     votes = PropositionVote.objects.values('proposition').annotate(total=Count('proposition')).order_by('proposition')

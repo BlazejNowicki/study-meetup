@@ -30,6 +30,18 @@ class Event(models.Model):
     def set_status_approved(self):
         self.status = 2
 
+    def set_status_archived(self):
+        self.status = 3
+
+    def is_waiting(self):
+        return self.status == 1
+
+    def is_approved(self):
+        return self.status == 2
+
+    def is_archived(self):
+        return self.status == 3
+
 
 class Proposition(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
