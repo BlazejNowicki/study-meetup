@@ -20,7 +20,7 @@ def event_list(request):
 
     followers = Follower.objects.filter(student=request.user)
     ids = [follower.course.id for follower in followers]
-    events = Event.objects.filter(pk__in=ids).order_by('-id')
+    events = Event.objects.filter(course__id__in=ids).order_by('-id')
     return render(request, 'event/event_list.html', {'events': events})
 
 

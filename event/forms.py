@@ -1,5 +1,6 @@
 from django import forms
 
+from .models import Event
 from catalog.models import Follower
 
 
@@ -19,3 +20,10 @@ class EventForm(forms.Form):
             widget=forms.Select(attrs={'class': 'form-control'}),
             choices=courses_for_student_as_choices(self.request.user)
         )
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        events = Event.objects.filter(name=name)
+        if events:
+            raise forms.ValidationError('This name already exists')
+        return name
