@@ -16,3 +16,4 @@ migrations/
 
 # Translations
 *.mo
+data
