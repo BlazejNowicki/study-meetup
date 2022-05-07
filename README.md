@@ -23,7 +23,12 @@ docker-compose run web python3 manage.py makemigrations catalog event
 docker-compose run web python3 manage.py migrate
 ```
 
-To create superuser
+(optional) Adding mock data
+```
+docker-compose run web python ./add_mock_data.py
+```
+
+(optional) Creating superuser (admin panel available at /admin)
 ```
 docker-compose run web python manage.py createsuperuser
 ```
