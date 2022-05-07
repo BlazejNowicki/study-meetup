@@ -9,3 +9,21 @@ VPS
 
 Mateusz Furga
 Błażej Nowicki
+
+## Setup
+```
+docker-compose up
+```
+
+```
+docker-compose run web python3 manage.py makemigrations catalog event
+```
+
+```
+docker-compose run web python3 manage.py migrate
+```
+
+To create superuser
+```
+docker-compose run web python manage.py createsuperuser
+```
